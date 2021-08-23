@@ -27,9 +27,6 @@ export default {
   data() {
     return {
       todos: [
-        {id: '001', title: 'chouyan', done: false},
-        {id: '002', title: 'hejiu', done: false},
-        {id: '003', title: 'kaiche', done: false}
       ]
     }
   },
