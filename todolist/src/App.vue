@@ -26,8 +26,7 @@ export default {
   },
   data() {
     return {
-      todos: [
-      ]
+      todos: JSON.parse(localStorage.getItem('todos')) || []
     }
   },
   methods: {
@@ -54,6 +53,14 @@ export default {
       this.todos = this.todos.filter(todo => {
         return !todo.done
       })
+    }
+  },
+  watch: {
+    todos: {
+      deep: true,
+      handler(value) {
+        localStorage.setItem('todos', JSON.stringify(value))
+      }
     }
   }
 }
