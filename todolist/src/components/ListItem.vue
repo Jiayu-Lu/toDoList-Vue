@@ -60,4 +60,8 @@ export default {
   border-radius: 5px;
 }
 
+.list-item-button:hover {
+  background-color: #BD5A51FC;
+}
+
 </style>

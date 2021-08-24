@@ -6,7 +6,7 @@
       Finish {{ doneTotal }}/ All {{ total }}
       </span>
     </label>
-    <button class="list-item-button" @click="clearAll">Delete aLl finished tasks</button>
+    <button class="list-item-button" @click="clearAll">Delete all finished tasks</button>
   </div>
 </template>
 
@@ -45,6 +45,10 @@ export default {
   border: none;
   padding: 0.8vh 1vw;
   border-radius: 5px;
+}
+
+.list-item-button:hover {
+  background-color: #BD5A51FC;
 }
 
 .todo-footer {
