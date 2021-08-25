@@ -6,6 +6,9 @@
       Finish {{ doneTotal }}/ All {{ total }}
       </span>
     </label>
+    <b-progress :max="max" animated class="todo-progess">
+      <b-progress-bar :value="value" :label="`${((value / max) * 100).toFixed(0)}%`"></b-progress-bar>
+    </b-progress>
     <button class="list-item-button" @click="clearAll">Delete all finished tasks</button>
   </div>
 </template>
@@ -14,7 +17,16 @@
 export default {
   name: "ListFooter",
   props: ["todos", "checkAllTodo", "clearAllTodo"],
+  data() {
+    return {
+      max: 100
+    }
+  },
   computed: {
+    value() {
+      if(this.total === 0) return 0
+      return this.doneTotal / this.total * 100
+    },
     total() {
       return this.todos.length
     },
@@ -32,7 +44,9 @@ export default {
       this.checkAllTodo(e.target.checked)
     },
     clearAll() {
-      this.clearAllTodo()
+      if(confirm("are you sure to delete all finished tasks")) {
+        this.clearAllTodo()
+      }
     }
   }
 }
@@ -54,8 +68,13 @@ export default {
 .todo-footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   margin: 2vh auto;
+}
+
+.todo-progess {
+  width: 50%;
 }
 
 </style>

@@ -3,9 +3,9 @@
     <b-container>
       <b-row align-h="center">
         <b-col sm="10" xs="12">
-          <ListHeader :addTodo="addTodo"></ListHeader>
-          <List :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo"></List>
+          <ListHeader @addTodo="addTodo"></ListHeader>
           <ListFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearAllTodo="clearAllTodo"></ListFooter>
+          <List :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo"></List>
         </b-col>
       </b-row>
     </b-container>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import pubsub from 'pubsub-js';
 import ListHeader from "./components/ListHeader";
 import List from "./components/List";
 import ListFooter from "./components/ListFooter";
@@ -26,7 +27,8 @@ export default {
   },
   data() {
     return {
-      todos: JSON.parse(localStorage.getItem('todos')) || []
+      todos: JSON.parse(localStorage.getItem('todos')) || [],
+      pubId: ""
     }
   },
   methods: {
@@ -38,20 +40,26 @@ export default {
         if(todo.id === id) todo.done = !todo.done
       })
     },
-    deleteTodo(id) {
+    deleteTodo(_, id) {
       this.todos = this.todos.filter(todo => {
         return todo.id !== id
       })
     },
     checkAllTodo(done) {
       this.todos.forEach(todo => {
-        console.log(todo, done)
         todo.done = done
       })
     },
     clearAllTodo() {
       this.todos = this.todos.filter(todo => {
         return !todo.done
+      })
+    },
+    updateTodo(_, data) {
+      this.todos.forEach((todo) => {
+        if(todo.id === data.todoId) {
+          todo.title = data.todoTitle
+        }
       })
     }
   },
@@ -62,6 +70,14 @@ export default {
         localStorage.setItem('todos', JSON.stringify(value))
       }
     }
+  },
+  mounted() {
+    this.deleteTodoPubId = pubsub.subscribe('deleteTodo', this.deleteTodo)
+    this.updateTodoPubId = pubsub.subscribe('updateTodo', this.updateTodo)
+  },
+  beforeDestroy() {
+    pubsub.unsubscribe(this.deleteTodoPubId)
+    pubsub.unsubscribe(this.updateTodoPubId)
   }
 }
 </script>
@@ -74,6 +90,11 @@ export default {
   }
 
   #app {
-    margin: 2vh auto;
+    min-height: 100vh;
+    background-image: url("assets/BgImages/todoBg.jpg");
+    background-size: contain;
+    background-position: top center;
+    background-repeat: no-repeat;
+    padding: 2vh 1vw;
   }
 </style>
