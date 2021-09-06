@@ -91,10 +91,6 @@ export default {
 
   #app {
     min-height: 100vh;
-    background-image: url("assets/BgImages/todoBg.jpg");
-    background-size: contain;
-    background-position: top center;
-    background-repeat: no-repeat;
     padding: 2vh 1vw;
   }
 </style>
